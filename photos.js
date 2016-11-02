@@ -1,14 +1,14 @@
 /*    
     Program Name:  Photo Gallery Application
-    Author: 
-    Date:   
+    Author: Saxon Boucher
+    Date:   10-28-16
     Filename: photos.js
  */
 
 
 "use strict"; // interpret document contents in JavaScript strict mode
 
-/* global variables */
+// global variables 
 var photoOrder = [1,2,3,4,5];
 var figureCount = 3;
 
@@ -16,7 +16,22 @@ var figureCount = 3;
 /* This method adds src values to img elements based on order specified in photoOrder array             */
 /********************************************************************************************************/
 function populateFigures() {
+    var filename;
+    var currentFig;
 
+if(figureCount ===3){
+        for (var i = 1; i < 4; i++) {
+            filename = "images/IMG_0" + photoOrder[i] + "sm.jpg";
+            currentFig = document.getElementsByTagName("img")[i -1];
+            currentFig.src = filename;
+        }//end of for loop
+} else {
+    for (var i = 0; i < 5; i++){
+        filename = "images/IMG_0" + photoOrder[i] + "sm.jpg";
+        currentFig = document.getElementsByTagName("img")[i];
+        currentFig.src = filename;
+    }//end of for loop
+}//end of else
 
 
 
@@ -68,9 +83,46 @@ function leftArrow() {
 /******************************************************************************************************/
 function previewFive() {
    
-
+  //locate first element where the tag is article assign to a variable
+  var articleE1 = document.getElementsByTagName("article")[0];
+  
+   // create figure and img elements for fifth image
+   var lastFigure = document.createElement("figure");
    
+   lastFigure.id = "fig5";
+   lastFigure.style.zindex = "5";
+   lastFigure.style.position = "absolute:";
+   lastFigure.style.right = "45px";
+   lastFigure.style.top = "67px";
    
+   var lastimage = document.createElement("img");
+   lastimage.width = "240";
+   lastimage.height = "135";
+  
+  //create img element for the fifth image to preview
+  lastFigure.appendChild(lastimage);
+  
+  articleE1.appendChild(lastFigure);
+  
+  //clone figure element for fifth image and edit to be first image
+  var firstFigure = lastFigure.cloneNode(true);
+  
+  firstFigure.id = "fig1";
+  firstFigure.style.right = "";
+  firstFigure.style.left = "45px";
+  
+  articleE1.insertBefore(firstFigure,document.getElementById("fig2"));
+  
+  //add appropriate src values to two new img elements
+  document.getElementsByTagName("img")[0].src = "images/IMG_0" +photoOrder[0] + "sm.jpg";
+  document.getElementsByTagName("img")[4].src = "images/IMG_0" + photoOrder[4] + "sm.jpg";
+   
+  figureCount = 5;
+  
+  //disable the 'showmore images' button after it has been selected once
+  var numberButton = document.querySelector("#fiveButton p");
+  numberButton.removeEventListener("click",previewFive,false);
+    
 }//end of previewFive()
 
 /****************************************END of previewFive() Function**********************************/
@@ -80,10 +132,30 @@ function previewFive() {
 /***********************************createEventListeners() Function*************************************/
 /*         This method attaches event listeners to the buttons (left, right, and show all).            */
 /*******************************************************************************************************/
+//create event listeners for left arrow, right arrwo, and fiveButton elements
+
 function createEventListeners() {
+    
+    //declare variable for document element with id of leftarrow, which is in the html document
+    var leftarrow =document.getElementById("leftarrow");
+    
+    //add an event handler to the specified document element (leftarrow)
+    //the left Arrow() function will be executed when the user clicks the left navigation arrow button
+    leftarrow.addEventListener("click",leftArrow,false);
+    
+    //declare variable for document element with id of rightarrow in the html document
+    var rightarrow =document.getElementById("rightarrow");
+    
+    //add an event handler to the specified document element (rightarrow)
+    //therightArrow() function will be executed when user clicks the right navigation arrow
+    rightarrow.addEventListener("click",rightArrow,false);
+
+   //declare a variable for the element fiveButton
+   var showAllButton = document.querySelector("#fiveButton p");
    
-
-
+   //add event listener to showAllButton element
+   //when the user clicks the Show More button the previewFive() function is executed
+   showAllButton.addEventListener("click", previewFive, false);
    
 }//end of createEventListeners function
 
